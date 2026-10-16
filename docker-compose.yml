@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3
+    container_name: ecommerce_clickhouse
+    ports:
+      - "8123:8123"   # HTTP interface (used by clickhouse-connect / DBeaver HTTP driver)
+      - "9000:9000"   # native TCP interface (used by DBeaver native driver)
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-}
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./warehouse/ddl:/docker-entrypoint-initdb.d
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+volumes:
+  clickhouse_data:

@@ -1,0 +1,8 @@
+pandas
+numpy
+clickhouse-connect
+matplotlib
+seaborn
+python-dotenv
+pytest
+kaggle
