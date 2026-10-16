@@ -1,3 +1,21 @@
+## Delivery-Risk Model (Keras MLP vs baselines)
+
+Task: flag delivered orders likely to arrive later than promised, using only information known at purchase time (no delivery dates, no review score). Time-based split; held-out test set of 14,471 orders, 4.3% late.
+
+| Model | ROC-AUC | PR-AUC | Precision | Recall | F1 |
+|---|---|---|---|---|---|
+| Dummy baseline | 0.500 | 0.043 | 0.043 | 1.000 | 0.082 |
+| Logistic Regression | 0.650 | 0.078 | 0.077 | 0.261 | 0.119 |
+| Gradient Boosting | 0.736 | 0.099 | 0.105 | 0.518 | 0.175 |
+| Keras MLP | 0.604 | 0.067 | 0.081 | 0.152 | 0.105 |
+
+Gradient boosting performed best. The strongest signals were the promised delivery window, customer state, same-state shipping and freight cost. Predictions are stored in `default.delivery_predictions`.
+
+**Limitations:** historical batch data, weak predictive signal, and monthly late rates vary widely (about 1% to 19%), which order-level features cannot explain. This is a retrospective classifier, not a production early-warning system.
+
+![Precision-recall curves](reports/pr_curves.png)
+
+Run: `python ml/train.py`
 # E-Commerce Data Warehouse & Analytics — Olist Brazilian Marketplace
 
 **What problem?** E-commerce marketplace teams need to answer sales, delivery-performance,
